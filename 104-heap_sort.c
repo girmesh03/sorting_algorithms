@@ -50,6 +50,9 @@ void heap_sort(int *array, size_t size)
 	int start = (size - 2) / 2;
 	int end, temp;
 
+	if (array == NULL || size < 2)
+		return;
+
 	while (start >= 0)
 	{
 		sift_down(array, start, size - 1, size);
