@@ -48,8 +48,6 @@ void merge(int *array, int *left, int *right,
 	print_array(left, left_size);
 	printf("[right]: ");
 	print_array(right, right_size);
-	printf("[Done]: ");
-	print_array(temp, size);
 
 	memcpy(array, temp, sizeof(int) * size);
 	free(temp);
@@ -79,5 +77,7 @@ void merge_sort(int *array, size_t size)
 		merge_sort(right, right_size);
 
 		merge(array, left, right, left_size, right_size, size);
+		printf("[Done]: ");
+		print_array(array, size);
 	}
 }
