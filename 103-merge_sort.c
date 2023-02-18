@@ -1,5 +1,9 @@
 #include "sort.h"
 
+void merge(int *array, int *left_array, int *right_array,
+		   int left_size, int right_size, int size);
+void merge_sort(int *array, size_t size);
+
 /**
  * merge - merge two arrays
  * @array: array to sort
@@ -14,7 +18,6 @@ void merge(int *array, int *left_array, int *right_array,
 		   int left_size, int right_size, int size)
 {
 	int *temp = malloc(sizeof(int) * size);
-
 	int i = 0, j = 0, k = 0;
 
 	printf("Merging...\n");
