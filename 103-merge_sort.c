@@ -1,6 +1,17 @@
 #include "sort.h"
 #include <string.h>
 
+/**
+ * merge - merge two arrays
+ * @array: array to merge
+ * @left: left array
+ * @right: right array
+ * @left_size: size of left array
+ * @right_size: size of right array
+ * @size: size of the array
+ * Return: void
+ */
+
 void merge(int *array, int *left, int *right,
 		   size_t left_size, size_t right_size, size_t size)
 {
@@ -49,6 +60,7 @@ void merge(int *array, int *left, int *right,
  * using the Merge Sort algorithm
  * @array: array to sort
  * @size: size of the array
+ * Return: void
  */
 
 void merge_sort(int *array, size_t size)
