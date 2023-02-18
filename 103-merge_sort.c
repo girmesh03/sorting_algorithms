@@ -1,82 +1,78 @@
 #include "sort.h"
 
-void merge(int *array, int *left_array, int *right_array,
-		   int left_size, int right_size, int size);
-void merge_sort(int *array, size_t size);
+void merge(int *array, int left_size, int right_size);
+
 /**
- * merge - merge two arrays
+ * merge - merge two subarrays
  * @array: array to sort
- * @left_array: left array
- * @right_array: right array
- * @left_size: size of left array
- * @right_size: size of right array
- * @size: size of the array
+ * @left_size: size of left subarray
+ * @right_size: size of right subarray
  */
-void merge(int *array, int *left_array, int *right_array,
-		   int left_size, int right_size, int size)
+
+void merge(int *array, int left_size, int right_size)
 {
-	int *temp = malloc(sizeof(int) * size);
+	int *temp;
 	int i = 0, j = 0, k = 0;
 
-	printf("Merging...\n");
+	temp = malloc(sizeof(int) * (left_size + right_size));
+	if (temp == NULL)
+	{
+		return;
+	}
+
+	printf("Merging...\n[left]: ");
+	print_array(array, left_size);
+	printf("[right]: ");
+	print_array(array + left_size, right_size);
+
 	while (i < left_size && j < right_size)
 	{
-		if (left_array[i] <= right_array[j])
+		if (array[i] <= array[left_size + j])
 		{
-			temp[k++] = left_array[i++];
+			temp[k++] = array[i++];
 		}
 		else
 		{
-			temp[k++] = right_array[j++];
+			temp[k++] = array[left_size + j++];
 		}
 	}
-	if (i > left_size)
+
+	while (i < left_size)
 	{
-		while (j < right_size)
-		{
-			temp[k++] = right_array[j++];
-		}
+		temp[k++] = array[i++];
 	}
-	else
+
+	while (j < right_size)
 	{
-		while (i <= left_size)
-		{
-			temp[k++] = left_array[i++];
-		}
+		temp[k++] = array[left_size + j++];
 	}
-	printf("[left]: ");
-	print_array(left_array, left_size);
-	printf("[right]: ");
-	print_array(right_array, right_size);
+
 	printf("[Done]: ");
-	print_array(temp, size);
-	for (i = 0; i < size; i++)
+	print_array(temp, left_size + right_size);
+
+	for (i = 0; i < left_size + right_size; i++)
 	{
 		array[i] = temp[i];
 	}
+
 	free(temp);
 }
+
 /**
- * merge_sort - sorts an array of integers in ascending order
- * using the Merge Sort algorithm
+ * merge_sort - merge sort algorithm
  * @array: array to sort
- * @size: size of the array
+ * @size: size of array
  */
+
 void merge_sort(int *array, size_t size)
 {
-	int *left_array, *right_array;
-	size_t left_size, right_size;
-
 	if (size > 1)
 	{
-		left_size = size / 2;
-		right_size = size - left_size;
-		left_array = array;
-		right_array = array + left_size;
+		int left_size = size / 2;
+		int right_size = size - left_size;
 
-		merge_sort(left_array, left_size);
-		merge_sort(right_array, right_size);
-		merge(array, left_array, right_array,
-			  left_size, right_size, size);
+		merge_sort(array, left_size);
+		merge_sort(array + left_size, right_size);
+		merge(array, left_size, right_size);
 	}
 }
