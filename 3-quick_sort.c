@@ -53,13 +53,13 @@ int partition(int *array, int low, int high, size_t size)
 
 void quick_sort_helper(int *array, int low, int high, size_t size)
 {
-	int pivot;
+	int location;
 
 	if (low < high)
 	{
-		pivot = partition(array, low, high, size);
-		quick_sort_helper(array, low, pivot - 1, size);
-		quick_sort_helper(array, pivot + 1, high, size);
+		location = partition(array, low, high, size);
+		quick_sort_helper(array, low, location - 1, size);
+		quick_sort_helper(array, location + 1, high, size);
 	}
 }
 
