@@ -36,6 +36,11 @@ void merge(int *array, int *left, int *right,
 			temp[k++] = right[j++];
 		}
 	}
+
+	print_array(left, left_size);
+	printf("[right]: ");
+	print_array(right, right_size);
+
 	while (i < left_size)
 	{
 		temp[k++] = left[i++];
@@ -44,10 +49,6 @@ void merge(int *array, int *left, int *right,
 	{
 		temp[k++] = right[j++];
 	}
-
-	print_array(left, left_size);
-	printf("[right]: ");
-	print_array(right, right_size);
 
 	memcpy(array, temp, sizeof(int) * size);
 	free(temp);
