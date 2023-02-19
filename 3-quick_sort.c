@@ -1,52 +1,49 @@
 #include "sort.h"
 
 /**
- * swap - swaps two integers
- * @a: first integer
- * @b: second integer
- * Return: void
- */
-
-void swap(int *a, int *b)
-{
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-/**
- * partition - partitions the array
- * @array: array to be partitioned
+ * partition - sorts an array of integers in ascending order
+ * @array: array to be sorted
  * @low: low index
  * @high: high index
  * @size: size of the array
- * Return: partition index
+ * Return: pivot index
  */
 
 int partition(int *array, int low, int high, size_t size)
 {
-	int pivot = array[high];
-	int start = low - 1;
-	int end = high;
+	int pivot, i, j, temp;
 
-	while (start < end)
+	pivot = array[high];
+	i = low - 1;
+
+	for (j = low; j < high; j++)
 	{
-		while (array[start] <= pivot)
-			start++;
-		while (array[end] > pivot)
-			end--;
-		if (start < end)
+		if (array[j] < pivot)
 		{
-			swap(&array[start], &array[end]);
-			print_array(array, size);
+			i++;
+			if (i != j)
+			{
+				temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+				print_array(array, size);
+			}
 		}
 	}
 
-	swap(&array[low], &array[end]);
-	return (end);
+	if (array[i + 1] > array[high])
+	{
+		temp = array[i + 1];
+		array[i + 1] = array[high];
+		array[high] = temp;
+		print_array(array, size);
+	}
+
+	return (i + 1);
 }
 
 /**
- * quick_sort_helper - helper function for quick sort
+ * quick_sort_helper - sorts an array of integers in ascending order
  * @array: array to be sorted
  * @low: low index
  * @high: high index
@@ -56,19 +53,19 @@ int partition(int *array, int low, int high, size_t size)
 
 void quick_sort_helper(int *array, int low, int high, size_t size)
 {
-	int loc;
+	int pivot;
 
 	if (low < high)
 	{
-		loc = partition(array, low, high - 1, size);
-		quick_sort_helper(array, low, loc - 1, size);
-		quick_sort_helper(array, loc + 1, high, size);
+		pivot = partition(array, low, high, size);
+		quick_sort_helper(array, low, pivot - 1, size);
+		quick_sort_helper(array, pivot + 1, high, size);
 	}
 }
 
 /**
- * quick_sort - sorts an array of integers in ascending order using the
- * Quick sort algorithm
+ * quick_sort - sorts an array of integers in ascending order
+ * using the Quick sort algorithm and Lomuto partition scheme
  * @array: array to be sorted
  * @size: size of the array
  * Return: void
@@ -76,5 +73,8 @@ void quick_sort_helper(int *array, int low, int high, size_t size)
 
 void quick_sort(int *array, size_t size)
 {
-	quick_sort_helper(array, 0, size, size);
+	if (array == NULL || size < 2)
+		return;
+
+	quick_sort_helper(array, 0, size - 1, size);
 }
