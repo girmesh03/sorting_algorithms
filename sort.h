@@ -40,7 +40,6 @@ void quick_sort_hoare(int *array, size_t size);
 void merge(int *array, int *left, int *right, size_t left_size,
 		   size_t right_size, size_t size);
 
-void swap(int *a, int *b);
 void max_heapify(int *array, size_t size, int i);
 
 #endif
