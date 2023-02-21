@@ -1,91 +1,72 @@
 #include "sort.h"
-
-void swap(int *a, int *b);
-int hoare_partition(int *array, int low, int high, size_t size);
-void quick_sort_helper(int *array, int low, int high, size_t size);
-
 /**
- * swap - swaps two integers
- * @a: first integer
- * @b: second integer
+ *swap - the positions of two elements into an array
+ *@array: array
+ *@item1: array element
+ *@item2: array element
  */
-
-void swap(int *a, int *b)
+void swap(int *array, ssize_t item1, ssize_t item2)
 {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
+	int tmp;
+
+	tmp = array[item1];
+	array[item1] = array[item2];
+	array[item2] = tmp;
 }
-
 /**
- * hoare_partition - partitions an array of integers around a pivot
- * @array: array to partition
- * @low: start index of array
- * @high: end index of array
- * @size: size of array
- * Return: index of pivot
+ *hoare_partition - hoare partition sorting scheme implementation
+ *@array: array
+ *@first: first array element
+ *@last: last array element
+ *@size: size array
+ *Return: return the position of the last element sorted
  */
-
-int hoare_partition(int *array, int low, int high, size_t size)
+int hoare_partition(int *array, int first, int last, int size)
 {
-	int pivot = array[high];
-	int i = low - 1;
-	int j = high + 1;
+	int current = first - 1, finder = last + 1;
+	int pivot = array[last];
 
 	while (1)
 	{
-		do {
-			i++;
-		} while (array[i] < pivot);
 
 		do {
-			j--;
-		} while (array[j] > pivot);
-
-		if (i >= j)
-		{
-			return (j);
-		}
-
-		swap(&array[i], &array[j]);
+			current++;
+		} while (array[current] < pivot);
+		do {
+			finder--;
+		} while (array[finder] > pivot);
+		if (current >= finder)
+			return (current);
+		swap(array, current, finder);
 		print_array(array, size);
 	}
 }
-
 /**
- * quick_sort_helper - sorts an array of integers in ascending order using
- * the Quick sort algorithm
- * @array: array to sort
- * @low: start index of array
- * @high: end index of array
- * @size: size of array
- * Return: void
+ *qs - qucksort algorithm implementation
+ *@array: array
+ *@first: first array element
+ *@last: last array element
+ *@size: array size
  */
-
-void quick_sort_helper(int *array, int low, int high, size_t size)
+void qs(int *array, ssize_t first, ssize_t last, int size)
 {
-	int pivot;
+	ssize_t position = 0;
 
-	if (low < high)
+	if (first < last)
 	{
-		pivot = hoare_partition(array, low, high, size);
-		quick_sort_helper(array, low, pivot - 1, size);
-		quick_sort_helper(array, pivot, high, size);
+		position = hoare_partition(array, first, last, size);
+		qs(array, first, position - 1, size);
+		qs(array, position, last, size);
 	}
 }
-
 /**
- * quick_sort_hoare - sorts an array of integers in ascending order using
- * the Quick sort algorithm
- * @array: array to sort
- * @size: size of array
- * Return: void
+ *quick_sort_hoare - prepare the terrain to quicksort algorithm
+ *@array: array
+ *@size: array size
  */
 void quick_sort_hoare(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-	{
+	if (!array || size < 2)
 		return;
-	}
-	quick_sort_helper(array, 0, size - 1, size);
+	qs(array, 0, size - 1, size);
 }
