@@ -1,101 +1,97 @@
 #include "sort.h"
 
-void bitonic_merge(int *array, size_t start, size_t size, int up);
-void bitonic_sort_recursive(int *array, size_t start, size_t size, int up);
+void swap(int arr[], int item1, int item2, int order);
+void merge_bitonic(int arr[], int low, int nelemnt, int order);
+void bitonicsort(int arr[], int low, int nelemnt, int order, int size);
 
 /**
- * bitonic_merge - sorts an array of integers in ascending order using
- * the Bitonic sort algorithm
- * @array: array to sort
- * @start: start index of array
- * @size: size of array
- * @up: direction of sorting
- * Return: void
+ * swap - change two values in ascending or descending order
+ * @arr: array
+ * @item1: item one
+ * @item2: item two
+ * @order: 1: ascending order, 0 descending order
  */
-
-void bitonic_merge(int *array, size_t start, size_t size, int up)
+void swap(int arr[], int item1, int item2, int order)
 {
-	size_t half, i;
 	int temp;
 
-	if (size > 1)
+	if (order == (arr[item1] > arr[item2]))
 	{
-		half = size / 2;
-
-		for (i = start; i < start + half; i++)
-		{
-			if ((array[i] > array[i + half]) == up)
-			{
-				temp = array[i];
-				array[i] = array[i + half];
-				array[i + half] = temp;
-			}
-		}
-
-		bitonic_merge(array, start, half, up);
-		bitonic_merge(array, start + half, half, up);
+		temp = arr[item1];
+		arr[item1] = arr[item2];
+		arr[item2] = temp;
 	}
 }
-
 /**
- * bitonic_sort_recursive - sorts an array of integers in ascending order using
- * the Bitonic sort algorithm
- * @array: array to sort
- * @start: start index of array
- * @size: size of array
- * @up: direction of sorting
- * Return: void
+ * merge_bitonic - sort bitonic sequences recursively in both orders
+ * @arr: array
+ * @low: first element
+ * @nelemnt: elements number
+ * @order: 1: ascending order, 0 descending order
  */
-
-void bitonic_sort_recursive(int *array, size_t start, size_t size, int up)
+void merge_bitonic(int arr[], int low, int nelemnt, int order)
 {
-	size_t half;
+	int mid, i;
 
-	if (size > 1)
+	if (nelemnt > 1)
 	{
-		half = size / 2;
+		mid = nelemnt / 2;
+		for (i = low; i < low + mid; i++)
+			swap(arr, i, i + mid, order);
+		merge_bitonic(arr, low, mid, order);
+		merge_bitonic(arr, low + mid, mid, order);
+	}
+}
+/**
+ * bitonicsort - bitonic sort algorithm implementation
+ * @arr: array
+ * @low: first element
+ * @nelemnt: number of elements
+ * @order: 1: ascending order, 0 descending order
+ * @size: array lenght
+ */
+void bitonicsort(int arr[], int low, int nelemnt, int order, int size)
+{
+	int mid;
 
-		if (up >= 1)
+	if (nelemnt > 1)
+	{
+		if (order >= 1)
 		{
-			printf("Merging [%lu/%lu] (UP):\n", size, size);
-			print_array(&array[start], size);
+			printf("Merging [%i/%i] (UP):\n", nelemnt, size);
+			print_array(&arr[low], nelemnt);
 		}
 		else
 		{
-			printf("Merging [%lu/%lu] (DOWN):\n", size, size);
-			print_array(&array[start], size);
+			printf("Merging [%i/%i] (DOWN):\n", nelemnt, size);
+			print_array(&arr[low], nelemnt);
 		}
-
-		bitonic_sort_recursive(array, start, half, 1);
-		bitonic_sort_recursive(array, start + half, half, 0);
-
-		bitonic_merge(array, start, size, up);
-
-		if (up >= 1)
+		mid = nelemnt / 2;
+		bitonicsort(arr, low, mid, 1, size);
+		bitonicsort(arr, low + mid, mid, 0, size);
+		merge_bitonic(arr, low, nelemnt, order);
+		if (order <= 0)
 		{
-			printf("Result [%lu/%lu] (UP):\n", size, size);
-			print_array(&array[start], size);
+			printf("Result [%i/%i] (DOWN):\n", nelemnt, size);
+			print_array(&arr[low], nelemnt);
 		}
-		else
+		if (order >= 1)
 		{
-			printf("Result [%lu/%lu] (DOWN):\n", size, size);
-			print_array(&array[start], size);
+			printf("Result [%i/%i] (UP):\n", nelemnt, size);
+			print_array(&arr[low], nelemnt);
 		}
 	}
 }
-
 /**
- * bitonic_sort - sorts an array of integers in ascending order using the
- * Bitonic sort algorithm
- * @array: array to sort
- * @size: size of array
- * Return: void
+ * bitonic_sort - prepare the terrain to bitonic sort algorithm
+ * @array: array
+ * @size: array lenght
  */
-
 void bitonic_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
+	int order = 1;
 
-	bitonic_sort_recursive(array, 0, size, 1);
+	if (!array || size < 2)
+		return;
+	bitonicsort(array, 0, size, order, size);
 }
