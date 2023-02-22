@@ -12,6 +12,7 @@
 void swap(int arr[], int pivot_index, int j, size_t size)
 {
 	int temp = arr[pivot_index];
+
 	arr[pivot_index] = arr[j];
 	arr[j] = temp;
 
