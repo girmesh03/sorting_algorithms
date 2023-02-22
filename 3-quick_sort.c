@@ -1,65 +1,71 @@
 #include "sort.h"
 
 /**
- * partition - sorts an array of integers in ascending order
- * @array: array to be sorted
- * @low: low index
- * @high: high index
+ * swap - sorts an array of integers in ascending order
+ * @arr: array to be sorted
+ * @pivot_index: temporary pivot index
+ * @j: index, used to swap
  * @size: size of the array
- * Return: pivot index
+ * Return: void
  */
 
-int partition(int *array, int low, int high, size_t size)
+void swap(int arr[], int pivot_index, int j, size_t size)
 {
-	int pivot, i, j, temp;
+	int temp = arr[pivot_index];
+	arr[pivot_index] = arr[j];
+	arr[j] = temp;
 
-	pivot = array[high];
-	i = low - 1;
+	if (arr[pivot_index] != arr[j])
+		print_array(arr, size);
+}
 
-	for (j = low; j < high; j++)
+/**
+ * partition - sorts an array of integers in ascending order
+ * @array: array to be sorted
+ * @start: start index
+ * @end: end index
+ * @size: size of the array
+ * Return: pivot_index index
+ */
+
+int partition(int *array, int start, int end, size_t size)
+{
+	int pivot = array[end];
+	int pivot_index = start;
+	int i;
+
+	for (i = start; i < end; i++)
 	{
-		if (array[j] < pivot)
+		if (array[i] <= pivot)
 		{
-			i++;
-			if (i != j)
-			{
-				temp = array[i];
-				array[i] = array[j];
-				array[j] = temp;
-				print_array(array, size);
-			}
+			swap(array, pivot_index, i, size);
+			pivot_index++;
 		}
 	}
 
-	if (array[i + 1] > array[high])
-	{
-		temp = array[i + 1];
-		array[i + 1] = array[high];
-		array[high] = temp;
-		print_array(array, size);
-	}
+	swap(array, pivot_index, end, size);
 
-	return (i + 1);
+	return (pivot_index);
 }
 
 /**
  * quick_sort_helper - sorts an array of integers in ascending order
  * @array: array to be sorted
- * @low: low index
- * @high: high index
+ * @start: start index
+ * @end: end index
  * @size: size of the array
  * Return: void
  */
 
-void quick_sort_helper(int *array, int low, int high, size_t size)
+void quick_sort_helper(int *array, int start, int end, size_t size)
 {
-	int location;
+	int pivot_index;
 
-	if (low < high)
+	if (start < end)
 	{
-		location = partition(array, low, high, size);
-		quick_sort_helper(array, low, location - 1, size);
-		quick_sort_helper(array, location + 1, high, size);
+		pivot_index = partition(array, start, end, size);
+		quick_sort_helper(array, start, pivot_index - 1, size);
+		quick_sort_helper(array, pivot_index + 1, end, size);
 	}
 }
 
