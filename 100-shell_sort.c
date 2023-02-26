@@ -29,15 +29,15 @@ void shell_sort(int *array, size_t size)
 		for (i = gap; i < n; i++)
 		{
 			temp = array[i];
-			j = i;
+			j = i - gap;
 
-			while (j >= gap && array[j - gap] > temp)
+			while (j >= 0 && array[j] > temp)
 			{
-				array[j] = array[j - gap];
-				j = j - gap;
+				array[j + gap] = array[j];
+				j -= gap;
 			}
 
-			array[j] = temp;
+			array[j + gap] = temp;
 		}
 
 		print_array(array, size);
